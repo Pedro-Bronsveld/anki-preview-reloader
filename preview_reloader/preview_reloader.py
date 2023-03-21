@@ -16,7 +16,9 @@ class PreviewReloader(QObject):
     
     def emit_redraw_signal(self) -> None:
         if self.card_layout_dialog != None and self.card_layout_dialog.mw != None:
-            self.card_layout_dialog.redraw_everything()
+            # self.card_layout_dialog.redraw_everything()
+            self.card_layout_dialog.renderPreview()
+            self.card_layout_dialog.fill_fields_from_template()
     
     def set_card_layout_dialog(self, card_layout_dialog: CardLayout) -> None:
         self.card_layout_dialog = card_layout_dialog
