@@ -7,18 +7,17 @@ from anki.lang import without_unicode_isolation
 
 class PreviewReloader(QObject):
 
-    redraw_signal = pyqtSignal()
+    refresh_signal = pyqtSignal()
     card_layout_dialog: Optional[CardLayout] = None
 
     def __init__(self) -> None:
         super().__init__()
-        self.redraw_signal.connect(self.emit_redraw_signal)
+        self.refresh_signal.connect(self.emit_refresh_signal)
     
-    def emit_redraw_signal(self) -> None:
+    def emit_refresh_signal(self) -> None:
         if self.card_layout_dialog != None and self.card_layout_dialog.mw != None:
-            # self.card_layout_dialog.redraw_everything()
-            self.card_layout_dialog.renderPreview()
             self.card_layout_dialog.fill_fields_from_template()
+            self.card_layout_dialog.renderPreview()
     
     def set_card_layout_dialog(self, card_layout_dialog: CardLayout) -> None:
         self.card_layout_dialog = card_layout_dialog
@@ -39,8 +38,8 @@ class PreviewReloader(QObject):
             )
         )
 
-        # Send redraw signal to card layout dialog
-        self.redraw_signal.emit()
+        # Send refresh signal to card layout dialog
+        self.refresh_signal.emit()
     
     def cleanup(self) -> None:
         self.card_layout_dialog = None
