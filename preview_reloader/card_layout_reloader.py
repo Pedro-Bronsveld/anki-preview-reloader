@@ -4,7 +4,7 @@ from aqt.clayout import CardLayout
 from anki.models import NotetypeDict
 from aqt.utils import tr
 from anki.lang import without_unicode_isolation
-
+from anki.hooks import wrap
 class CardLayoutReloader(QObject):
 
     refresh_signal = pyqtSignal()
@@ -19,8 +19,9 @@ class CardLayoutReloader(QObject):
             self.card_layout.fill_fields_from_template()
             self.card_layout.renderPreview()
     
-    def set_card_layout_dialog(self, card_layout_dialog: CardLayout) -> None:
-        self.card_layout = card_layout_dialog
+    def set_card_layout(self, card_layout: CardLayout) -> None:
+        self.card_layout = card_layout
+        card_layout.cleanup = wrap(card_layout.cleanup, self.cleanup, "after")
     
     def on_model_updated(self, new_model: NotetypeDict) -> None:
         if self.card_layout == None or self.card_layout.mw == None or new_model == None:

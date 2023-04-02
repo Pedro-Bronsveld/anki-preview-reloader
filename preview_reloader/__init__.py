@@ -24,25 +24,17 @@ def on_main_window_init():
 
     mw.col.models.update_dict = wrap(mw.col.models.update_dict, on_model_updated, "around")
 
-    # Card layout dialog gui hooks and monkey patching
-    def on_card_layout_cleanup() -> None:
-        card_layout_reloader.cleanup()
-    
+    # Card layout dialog gui hooks and monkey patching    
     def on_card_layout_will_show(card_layout_dialog: CardLayout) -> None:
-        card_layout_reloader.set_card_layout_dialog(card_layout_dialog)
-        card_layout_dialog.cleanup = wrap(card_layout_dialog.cleanup, on_card_layout_cleanup, "after")
+        card_layout_reloader.set_card_layout(card_layout_dialog)
     
     gui_hooks.card_layout_will_show.append(on_card_layout_will_show)
     
     # Card previewer hooks
-    def on_previewer_close() -> None:
-        previewer_reloader.cleanup()
-
     def on_previewer_did_init(previewer: Previewer):
         if not isinstance(previewer, BrowserPreviewer):
             return
-        previewer_reloader.previewer = previewer
-        previewer._close_callback = wrap(previewer._close_callback, on_previewer_close, "before")
+        previewer_reloader.set_previewer(previewer)
     
     gui_hooks.previewer_did_init.append(on_previewer_did_init)
 

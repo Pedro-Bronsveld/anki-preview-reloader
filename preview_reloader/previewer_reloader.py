@@ -2,10 +2,15 @@ from typing import Optional
 from aqt.browser.previewer import Previewer
 from aqt import gui_hooks
 from anki.collection import OpChanges
+from anki.hooks import wrap
 
 class PreviewerReloader:
 
     previewer: Optional[Previewer] = None
+
+    def set_previewer(self, previewer: Previewer) -> None:
+        self.previewer = previewer
+        previewer._close_callback = wrap(previewer._close_callback, self.cleanup, "before")
 
     def on_model_updated(self) -> None:
         if self.previewer == None:
