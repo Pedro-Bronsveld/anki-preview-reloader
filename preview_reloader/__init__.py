@@ -5,31 +5,46 @@ from aqt.models import NotetypeDict
 from aqt import mw
 from anki.hooks import wrap
 from anki.collection import OpChanges
+from aqt.browser.previewer import BrowserPreviewer, Previewer
+from preview_reloader.previewer_reloader import PreviewerReloader
 
-from .preview_reloader import PreviewReloader
+from .card_layout_reloader import CardLayoutReloader
 
 def on_main_window_init():
 
-    preview_reloader = PreviewReloader()
+    card_layout_reloader = CardLayoutReloader()
+    previewer_reloader = PreviewerReloader()
 
     # Model updates monkey patching
     def on_model_updated(notetype: NotetypeDict, _old: Callable[[NotetypeDict], OpChanges]) -> OpChanges:
         result = _old(notetype)
-        preview_reloader.on_model_updated(notetype)
+        card_layout_reloader.on_model_updated(notetype)
+        previewer_reloader.on_model_updated()
         return result
 
     mw.col.models.update_dict = wrap(mw.col.models.update_dict, on_model_updated, "around")
 
     # Card layout dialog gui hooks and monkey patching
     def on_card_layout_cleanup() -> None:
-        preview_reloader.cleanup()
+        card_layout_reloader.cleanup()
     
     def on_card_layout_will_show(card_layout_dialog: CardLayout) -> None:
-        preview_reloader.set_card_layout_dialog(card_layout_dialog)
+        card_layout_reloader.set_card_layout_dialog(card_layout_dialog)
         card_layout_dialog.cleanup = wrap(card_layout_dialog.cleanup, on_card_layout_cleanup, "after")
     
     gui_hooks.card_layout_will_show.append(on_card_layout_will_show)
+    
+    # Card previewer hooks
+    def on_previewer_close() -> None:
+        previewer_reloader.cleanup()
 
+    def on_previewer_did_init(previewer: Previewer):
+        if not isinstance(previewer, BrowserPreviewer):
+            return
+        previewer_reloader.previewer = previewer
+        previewer._close_callback = wrap(previewer._close_callback, on_previewer_close, "before")
+    
+    gui_hooks.previewer_did_init.append(on_previewer_did_init)
 
 if __name__ != "__main__":
     # Initialize addon when main window loads

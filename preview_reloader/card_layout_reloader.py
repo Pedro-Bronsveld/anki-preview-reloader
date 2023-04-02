@@ -5,34 +5,34 @@ from anki.models import NotetypeDict
 from aqt.utils import tr
 from anki.lang import without_unicode_isolation
 
-class PreviewReloader(QObject):
+class CardLayoutReloader(QObject):
 
     refresh_signal = pyqtSignal()
-    card_layout_dialog: Optional[CardLayout] = None
+    card_layout: Optional[CardLayout] = None
 
     def __init__(self) -> None:
         super().__init__()
         self.refresh_signal.connect(self.emit_refresh_signal)
     
     def emit_refresh_signal(self) -> None:
-        if self.card_layout_dialog != None and self.card_layout_dialog.mw != None:
-            self.card_layout_dialog.fill_fields_from_template()
-            self.card_layout_dialog.renderPreview()
+        if self.card_layout != None and self.card_layout.mw != None:
+            self.card_layout.fill_fields_from_template()
+            self.card_layout.renderPreview()
     
     def set_card_layout_dialog(self, card_layout_dialog: CardLayout) -> None:
-        self.card_layout_dialog = card_layout_dialog
+        self.card_layout = card_layout_dialog
     
     def on_model_updated(self, new_model: NotetypeDict) -> None:
-        if self.card_layout_dialog == None or self.card_layout_dialog.mw == None or new_model == None:
+        if self.card_layout == None or self.card_layout.mw == None or new_model == None:
             return
         
-        if new_model["id"] != self.card_layout_dialog.model["id"]:
+        if new_model["id"] != self.card_layout.model["id"]:
             return
         
         # Update note type model in card layout dialog
-        self.card_layout_dialog.model = new_model
-        self.card_layout_dialog.templates = new_model["tmpls"]
-        self.card_layout_dialog.setWindowTitle(
+        self.card_layout.model = new_model
+        self.card_layout.templates = new_model["tmpls"]
+        self.card_layout.setWindowTitle(
             without_unicode_isolation(
                 tr.card_templates_card_types_for(val=new_model["name"])
             )
@@ -42,4 +42,4 @@ class PreviewReloader(QObject):
         self.refresh_signal.emit()
     
     def cleanup(self) -> None:
-        self.card_layout_dialog = None
+        self.card_layout = None
