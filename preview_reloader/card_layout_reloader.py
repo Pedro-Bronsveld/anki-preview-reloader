@@ -3,6 +3,7 @@ from aqt import QObject, pyqtSignal
 from aqt.clayout import CardLayout
 from anki.models import NotetypeDict
 from aqt.utils import tr
+from aqt.schema_change_tracker import Change
 from anki.lang import without_unicode_isolation
 from anki.hooks import wrap
 class CardLayoutReloader(QObject):
@@ -18,6 +19,7 @@ class CardLayoutReloader(QObject):
         if self.card_layout != None and self.card_layout.mw != None:
             self.card_layout.fill_fields_from_template()
             self.card_layout.renderPreview()
+            self.card_layout.change_tracker._changed = Change.NO_CHANGE
     
     def set_card_layout(self, card_layout: CardLayout) -> None:
         self.card_layout = card_layout
