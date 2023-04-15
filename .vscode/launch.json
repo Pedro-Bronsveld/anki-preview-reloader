@@ -13,6 +13,15 @@
                 "DISABLE_QT5_COMPAT": "1"
             },
             "cwd": "${workspaceFolder}"
+        },
+        {
+            "name": "Build",
+            "type": "python",
+            "request": "launch",
+            "program": "build.py",
+            "cwd": "${workspaceFolder}",
+            "console": "integratedTerminal",
+            "justMyCode": true
         }
     ]
 }
