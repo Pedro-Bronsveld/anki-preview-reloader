@@ -6,8 +6,8 @@ from aqt import mw
 from anki.hooks import wrap
 from anki.collection import OpChanges
 from aqt.browser.previewer import BrowserPreviewer, Previewer
-from preview_reloader.previewer_reloader import PreviewerReloader
 
+from .previewer_reloader import PreviewerReloader
 from .card_layout_reloader import CardLayoutReloader
 
 def on_main_window_init():
