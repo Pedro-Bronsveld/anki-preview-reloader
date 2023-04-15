@@ -4,12 +4,26 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "build",
+            "label": "Build",
+            "detail": "Runs build script to create a .ankiaddon file that can be installed in Anki.",
             "type": "shell",
             "options": {
                 "cwd": "${workspaceFolder}"
             },
-            "command": "python build.py"
+            "command": "python build.py",
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        },
+        {
+            "label": "Create Anki Description",
+            "detail": "Converts README.md to an html subset that can be used as description on Anki Web.",
+            "type": "shell",
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "command": "python convert_readme.py"
         }
     ]
 }
