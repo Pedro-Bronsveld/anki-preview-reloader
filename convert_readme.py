@@ -55,6 +55,7 @@ def main():
         output_file.write(output_html)
 
     print("Converting done")
+    print(f"Output file: {description_html.absolute()}")
 
 if __name__ == "__main__":
     main()

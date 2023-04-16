@@ -7,7 +7,8 @@ However, when a model template is updated externally, for example through [Anki-
 
 This add-on detects when a card template is updated, and when either the templates screen or card preview window is open, will reload the previews in these windows.
 
-This add-on was developed alongside the [Anki Editor](https://github.com/Pedro-Bronsveld/anki-editor) extension for VSCode, but should work with any other program that updates model templates through Anki-Connect.
+This add-on was developed alongside the [Anki Editor](https://github.com/Pedro-Bronsveld/anki-editor) extension for [Visual Studio Code](https://code.visualstudio.com/), 
+but should work with any other application that updates model templates through Anki-Connect.
 
 ## Demo
 
