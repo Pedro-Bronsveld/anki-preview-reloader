@@ -51,7 +51,8 @@ def main(args: Namespace):
     # Copy addon files without py cache files to build folder
     print(f"Copying addon files to build directory: {build_directory.absolute()}")
     exclude_patterns = {
-        "__pycache__"
+        "__pycache__",
+        "meta.json"
     }
     if type(version) == str:
         exclude_patterns.add("manifest.json")
