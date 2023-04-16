@@ -37,7 +37,7 @@ class AnkiWebExtension(Extension):
 
 def main():
     root_directory = Path(__file__).parent
-    readme_path = root_directory.parent.joinpath("README.md")
+    readme_path = root_directory.joinpath("README.md")
     description_html = root_directory.joinpath("ankiweb_description.html")
     
     html_bytes = io.BytesIO()
