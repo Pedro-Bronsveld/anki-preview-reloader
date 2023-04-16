@@ -10,11 +10,13 @@ root_directory = Path(__file__).parent
 
 # input paths
 src_directory = root_directory.joinpath("preview_reloader")
-src_manifest_path = src_directory.joinpath("manifest.json")
+src_manifest = src_directory.joinpath("manifest.json")
+src_license = root_directory.joinpath("LICENSE")
 
 # build paths
 build_directory = root_directory.joinpath("build")
 build_manifest = build_directory.joinpath("manifest.json")
+build_license = build_directory.joinpath("LICENSE")
 
 # dist paths
 dist_directory = root_directory.joinpath("dist")
@@ -63,11 +65,12 @@ def main(args: Namespace):
         build_directory,
         ignore=shutil.ignore_patterns(*exclude_patterns)
     )
+    shutil.copy2(src_license, build_license)
 
     # Set version in build manifest.json
     if type(version) == str:
         manifest_dict: dict | None = None
-        with open(src_manifest_path, "r") as manifest_input_file:
+        with open(src_manifest, "r") as manifest_input_file:
             manifest_dict = json.load(manifest_input_file)
         manifest_dict["human_version"] = version
         with open(build_manifest, "w") as manifest_output_file:
