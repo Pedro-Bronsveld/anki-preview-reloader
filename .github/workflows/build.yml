@@ -15,4 +15,5 @@ jobs:
       - name: Upload addon file as artifact
         uses: actions/upload-artifact@v3
         with:
+          name: preview_reloader_${{ github.ref_name }}.ankiaddon
           path: dist/*.ankiaddon
