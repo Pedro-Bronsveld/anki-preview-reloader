@@ -20,9 +20,6 @@ build_license = build_directory.joinpath("LICENSE")
 
 # dist paths
 dist_directory = root_directory.joinpath("dist")
-dist_zip_base = dist_directory.joinpath("preview_reloader")
-dist_zip = dist_directory.joinpath("preview_reloader.zip")
-dist_addon = dist_directory.joinpath("preview_reloader.ankiaddon")
 
 def clean():
     print("Cleaning existing build output.")
@@ -77,6 +74,11 @@ def main(args: Namespace):
             json.dump(manifest_dict, manifest_output_file, indent=4)
 
     # Create zip archive of build folder content
+    version_suffix = f"_{version}" if type(version) == str else ""
+    dist_zip_base = dist_directory.joinpath(f"preview_reloader{version_suffix}")
+    dist_zip = dist_directory.joinpath(f"preview_reloader{version_suffix}.zip")
+    dist_addon = dist_directory.joinpath(f"preview_reloader{version_suffix}.ankiaddon")
+    
     print(f"Creating zip file: {dist_zip.absolute()}")
     shutil.make_archive(dist_zip_base, "zip", build_directory)
     print(f"Creating ankiaddon file: {dist_addon.absolute()}")
