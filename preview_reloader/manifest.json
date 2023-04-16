@@ -1,4 +1,5 @@
 {
     "package": "preview_reloader",
-    "name": "Preview Reloader"
+    "name": "Preview Reloader",
+    "homepage": "https://github.com/Pedro-Bronsveld/anki-preview-reloader"
 }

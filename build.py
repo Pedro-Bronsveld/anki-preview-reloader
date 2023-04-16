@@ -1,15 +1,20 @@
 from pathlib import Path
 import shutil
-import sys
+import argparse
+from argparse import Namespace
+import re
+import json
 
 # root path
 root_directory = Path(__file__).parent
 
 # input paths
-addon_directory = root_directory.joinpath("preview_reloader")
+src_directory = root_directory.joinpath("preview_reloader")
+src_manifest_path = src_directory.joinpath("manifest.json")
 
 # build paths
 build_directory = root_directory.joinpath("build")
+build_manifest = build_directory.joinpath("manifest.json")
 
 # dist paths
 dist_directory = root_directory.joinpath("dist")
@@ -18,15 +23,30 @@ dist_zip = dist_directory.joinpath("preview_reloader.zip")
 dist_addon = dist_directory.joinpath("preview_reloader.ankiaddon")
 
 def clean():
+    print("Cleaning existing build output.")
     # Remove old builds
     if build_directory.exists():
+        print(f"Cleaning build directory: {build_directory.absolute()}")
         shutil.rmtree(build_directory)
 
     # Remove old dist directory
     if dist_directory.exists():
+        print(f"Cleaning dist directory: {dist_directory.absolute()}")
         shutil.rmtree(dist_directory)
 
-def main():
+def main(args: Namespace):
+
+    # Check if version argument was set
+    version: str | None = None
+    if type(args.version) == str:
+        if not re.match(r'^v\d+\.\d+\.\d+', args.version):
+            raise ValueError(f"Start of version '{args.version}' does not match the format 'v#.#.#'")
+        version = args.version
+        print(f"Building version: {version}")
+    else:
+        print("Building without version number")
+
+    # Clean existing build output
     clean()
 
     # Copy addon files without py cache files to build folder
@@ -34,11 +54,24 @@ def main():
     exclude_patterns = {
         "__pycache__"
     }
+    if type(version) == str:
+        exclude_patterns.add("manifest.json")
+    
+    # Copy files from addon source directory to build directory
     shutil.copytree(
-        addon_directory,
+        src_directory,
         build_directory,
         ignore=shutil.ignore_patterns(*exclude_patterns)
     )
+
+    # Set version in build manifest.json
+    if type(version) == str:
+        manifest_dict: dict | None = None
+        with open(src_manifest_path, "r") as manifest_input_file:
+            manifest_dict = json.load(manifest_input_file)
+        manifest_dict["human_version"] = version
+        with open(build_manifest, "w") as manifest_output_file:
+            json.dump(manifest_dict, manifest_output_file, indent=4)
 
     # Create zip archive of build folder content
     print(f"Creating zip file: {dist_zip.absolute()}")
@@ -49,7 +82,28 @@ def main():
     print("Build done.")
 
 if __name__ == "__main__":
-    if "clean" in sys.argv:
+    arg_parser = argparse.ArgumentParser(
+        prog="Anki Preview Reloader - Build Script",
+        description="Creates a build for the Anki Preview Reloader extension for Anki."
+    )
+
+    arg_parser.add_argument("-c", "--clean",
+        type=bool,
+        action=argparse.BooleanOptionalAction,
+        default=False,
+        help="Only clean existing output, don't create new build.",
+        dest="clean"
+    )
+
+    arg_parser.add_argument("-v", "--version",
+        type=str,
+        help="Optional version to set in manifest.json. Must start with a format matching a semantic version 'v#.#.#'",
+        dest="version"
+    )
+
+    args = arg_parser.parse_args()
+
+    if args.clean:
         clean()
     else:
-        main()
+        main(args)
