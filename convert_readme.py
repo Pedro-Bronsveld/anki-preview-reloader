@@ -44,12 +44,17 @@ def main():
     print(f"Converting markdown from {readme_path} to html in {description_html}")
     markdownFromFile(input=str(readme_path.absolute()), output=html_bytes, extensions=[AnkiWebExtension()])
 
-    soup = BeautifulSoup(html_bytes.getvalue().decode("utf-8"), 'html.parser')
+    html = html_bytes.getvalue().decode("utf-8")
+
+    soup = BeautifulSoup(html, 'html.parser')
 
     output_html = ""
     for tag in soup.children:
         tag_str = str(tag)
-        output_html += tag_str if tag_str == "\n" else tag_str + "\n"
+        tag_str_text = re.sub(r'(?:^<p>)|(?:<\/p>$)', "", tag_str)
+        if tag_str_text.endswith("</b>"):
+            tag_str_text += "\n"
+        output_html += tag_str_text if tag_str_text == "\n" else tag_str_text + "\n"
 
     with open(description_html, 'w') as output_file:
         output_file.write(output_html)
