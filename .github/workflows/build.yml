@@ -14,12 +14,12 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
-      - run: python build.py -v $GITHUB_REF_NAME
-      - name: Upload addon file to release
+      - name: Build add-on file
+        run: python build.py -v $GITHUB_REF_NAME
+      - name: Upload add-on file to release
         uses: ncipollo/release-action@v1
         with:
           artifacts: dist/*.ankiaddon
           allowUpdates: true
           replacesArtifacts: true
           draft: true
-          
