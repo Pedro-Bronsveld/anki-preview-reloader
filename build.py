@@ -38,8 +38,8 @@ def main(args: Namespace):
     # Check if version argument was set
     version: str | None = None
     if type(args.version) == str:
-        if not re.match(r'^v\d+\.\d+\.\d+', args.version):
-            raise ValueError(f"Start of version '{args.version}' does not match the format 'v#.#.#'")
+        if not re.match(r'^\d+\.\d+\.\d+', args.version):
+            raise ValueError(f"Start of version '{args.version}' does not match the format '#.#.#'")
         version = args.version
         print(f"Building version: {version}")
     else:
@@ -103,7 +103,7 @@ if __name__ == "__main__":
 
     arg_parser.add_argument("-v", "--version",
         type=str,
-        help="Optional version to set in manifest.json. Must start with a format matching a semantic version 'v#.#.#'",
+        help="Optional version to set in manifest.json. Must start with a format matching a semantic version '#.#.#'",
         dest="version"
     )
 

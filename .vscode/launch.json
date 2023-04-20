@@ -24,11 +24,11 @@
             "justMyCode": true
         },
         {
-            "name": "Build - v0.0.0-dev",
+            "name": "Build - 0.0.0-dev",
             "type": "python",
             "request": "launch",
             "program": "build.py",
-            "args": [ "-v", "v0.0.0-dev" ],
+            "args": [ "-v", "0.0.0-dev" ],
             "cwd": "${workspaceFolder}",
             "console": "integratedTerminal",
             "justMyCode": true
