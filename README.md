@@ -7,7 +7,10 @@ However, when a model template is updated externally, for example through [Anki-
 
 This add-on detects when a card template is updated, and when either the templates screen or card preview window is open, will reload the preview in these windows.
 
-This add-on was developed alongside the [Anki Editor](https://github.com/Pedro-Bronsveld/anki-editor) extension for [Visual Studio Code](https://code.visualstudio.com/), 
+- [Download](https://ankiweb.net/shared/info/0000000000) add-on from Anki Web
+- [Source Code](https://github.com/Pedro-Bronsveld/anki-preview-reloader) on GitHub
+
+This add-on was developed alongside the [Anki Editor](https://marketplace.visualstudio.com/items?itemName=pedro-bronsveld.anki-editor) extension for [Visual Studio Code](https://code.visualstudio.com/), 
 but should work with any other application that updates model templates through Anki-Connect.
 
 ## Demo

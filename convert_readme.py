@@ -56,6 +56,8 @@ def main():
             tag_str_text += "\n"
         output_html += tag_str_text if tag_str_text == "\n" else tag_str_text + "\n"
 
+    output_html = re.sub(r'\n.*https:\/\/ankiweb\.net\/shared\/info\/.*Download.*add-on.*(?=\n)', "", output_html, count=1)
+
     with open(description_html, 'w') as output_file:
         output_file.write(output_html)
 
