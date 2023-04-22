@@ -5,6 +5,8 @@ An add-on for [Anki](https://apps.ankiweb.net/) to automatically reload the prev
 By default these previews are only updated when making changes to card templates from within the Anki window.
 However, when a model template is updated externally, for example through [Anki-Connect](https://ankiweb.net/shared/info/2055492159), these previews are not affected if they're open.
 
+Note: you may need to restart Anki after installing the add-on for it to work.
+
 This add-on detects when a card template is updated, and when either the templates screen or card preview window is open, will reload the preview in these windows.
 
 - [Source Code](https://github.com/Pedro-Bronsveld/anki-preview-reloader) on GitHub
