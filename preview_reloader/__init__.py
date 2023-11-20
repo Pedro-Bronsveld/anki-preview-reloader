@@ -16,8 +16,9 @@ def on_main_window_init():
     previewer_reloader = PreviewerReloader()
 
     # Model updates monkey patching
-    def on_model_updated(notetype: NotetypeDict, _old: Callable[[NotetypeDict], OpChanges]) -> OpChanges:
-        result = _old(notetype)
+    def on_model_updated(*args, _old: Callable[[NotetypeDict, bool], OpChanges]) -> OpChanges:
+        result = _old(*args)
+        notetype: NotetypeDict = args[0]
         card_layout_reloader.on_model_updated(notetype)
         previewer_reloader.on_model_updated()
         return result
