@@ -40,5 +40,5 @@ def on_main_window_init():
     gui_hooks.previewer_did_init.append(on_previewer_did_init)
 
 if __name__ != "__main__":
-    # Initialize addon when main window loads
-    gui_hooks.main_window_did_init.append(on_main_window_init)
+    # Initialize addon when profile loads
+    gui_hooks.profile_did_open.append(on_main_window_init)
